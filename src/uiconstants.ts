@@ -1,3 +1,4 @@
+import P5 from "p5"
 import { p } from "./main"
 export const CANVAS_WIDTH = 1136
 export const CANVAS_HEIGHT = 640
@@ -8,3 +9,11 @@ export const LIGHTBLUE = () => p.color(108, 195, 239)
 export const ORANGE = () => p.color(255, 182, 97)
 export const BLACK = () => p.color(0, 0, 0)
 export const brighter = (color: P5.Color) => {
+    p.colorMode(p.HSB)
+    const h = p.hue(color)
+    const s = p.saturation(color)
+    const b = p.brightness(color)
+    const new_color = p.color(h, s*0.4, b*1.1)
+    p.colorMode(p.RGB)
+    return new_color
+}
