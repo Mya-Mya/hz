@@ -2,7 +2,7 @@ import P5 from "p5"
 import { Scene } from "./Scene"
 import { WelcomeScene } from "./WelcomeScene"
 import { StorylistScene } from "./StorylistScene"
-
+import { CANVAS_WIDTH,CANVAS_HEIGHT } from "./uiconstants"
 import { preload_images } from "./images"
 
 const name_to_scene = {
@@ -22,7 +22,7 @@ const preload = () => {
     preload_images(p)
 }
 const setup = () => {
-    p.createCanvas(1136, 640)
+    p.createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT)
     scene.on_enter()
 }
 
