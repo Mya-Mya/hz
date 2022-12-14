@@ -13,9 +13,11 @@ const update_starttext_brightness = () => {//system
 const draw_starttext = () => {
     p.push()
     p.textAlign(p.CENTER)
-    p.fill(108, 195, 239, starttext_anim * 255)
-    p.textSize(24)
-    p.text("Start", p.width / 2, p.height - 100)
+    const color = LIGHTBLUE()
+    color.setAlpha(starttext_anim * 255)
+    p.fill(color)
+    p.textSize(NORMAL_TEXTSIZE)
+    p.text("Start", CANVAS_WIDTH/2,CANVAS_HEIGHT-50)
     p.pop()
 }
 
@@ -35,7 +37,9 @@ const draw_ripples = () => {
     p.strokeWeight(4)
     p.blendMode(p.ADD)
     ripples.forEach(ripple => {
-        p.stroke(108 * ripple.rr, 195 * ripple.gr, 239 * ripple.br, 255 * p.pow(1 - ripple.lifetime, 2))
+        const color = LIGHTBLUE()
+        color.setAlpha(255 * p.pow(1 - ripple.lifetime, 2))
+        p.stroke(color)
         p.circle(ripple.x, ripple.y, 300 * p.sqrt(ripple.lifetime))
     })
     p.pop()
@@ -72,7 +76,9 @@ const update_feedout = () => {
 const draw_feetout = () => {
     if (feedout_running) {
         p.push()
-        p.fill(0, 0, 0, 255 * feedout_t)
+        const color = BLACK()
+        color.setAlpha(255 * feedout_t)
+        p.fill(color)
         p.rect(0, 0, p.width, p.height)
         p.pop()
     }
@@ -83,14 +89,13 @@ export class WelcomeScene implements Scene {
 
     }
     tick(): void {
-        p.background(240)
         p.image(get_image("bg0.png"), 0, 0)
         p.push()
-        p.fill("white")
-        p.textSize(18)
+        p.fill(WHITE())
+        p.textSize(NORMAL_TEXTSIZE)
         p.textAlign(p.RIGHT)
         p.text("黒歴史の先に...", 500, 300)
-        p.textSize(50)
+        p.textSize(LARGE_TEXTSIZE)
         p.text("Houlex続営機関", 500, 360)
         p.pop()
         update_starttext_brightness()
