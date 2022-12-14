@@ -1,6 +1,7 @@
 import P5 from "p5"
 import { Scene } from "./Scene";
 import { get_image } from "./images"
+import { p } from "./main"
 
 // Input entity
 let clicking: boolean = false
@@ -14,10 +15,10 @@ const previews: Preview[] = [
     { title: "雷雨の夜に" },
     { title: "何か" }
 ]
-// preview_index entity
+// C preview_index entity
 let preview_index = 0
 
-// preview animation entity
+// T preview animation entity
 let preview_anim_t = 0
 let preview_anim_running = true
 
@@ -34,6 +35,7 @@ type Bubble = {
     lifetime: number
     filled: boolean
 }
+// T
 let bubbles: Bubble[] = []
 
 const draw_preview = (p: P5) => {
@@ -56,14 +58,14 @@ const update_preview_anim = (p: P5) => {
         }
     }
 }
-
+// E
 const start_preview_anim = () => {
     if (!preview_anim_running) {
         preview_anim_running = true
         preview_anim_t = 0
     }
 }
-
+// E
 const add_multiple_bubbles = (x: number, y: number) => {
     for (let i = 0; i < 15; i++) {
         bubbles.push({
@@ -80,7 +82,7 @@ const add_multiple_bubbles = (x: number, y: number) => {
         })
     }
 }
-
+// S
 const update_bubbles = () => {
     bubbles.forEach(bubble => {
         bubble.x += bubble.v * Math.cos(bubble.theta)
@@ -90,7 +92,7 @@ const update_bubbles = () => {
     })
     bubbles = bubbles.filter(bubble => bubble.lifetime < 1)
 }
-
+// S
 const draw_bubbles = (p: P5) => {
     p.push()
     p.blendMode(p.ADD)
@@ -124,10 +126,12 @@ const prev_button: Button = { x: 130, y: 500, hover: false, clicked: false, text
 const next_button: Button = { x: 1136 - 130, y: 500, hover: false, clicked: false, text: ">>", important: false }
 const open_button: Button = { x: 1136 / 2, y: 500, hover: false, clicked: false, text: "開く", important: true }
 let buttons: Button[] = [prev_button, next_button, open_button]
+// C
 const update_buttons = (p: P5) => buttons.forEach(b => {
     b.hover = is_in_button(p.mouseX, p.mouseY, b)
     b.clicked = b.hover && clicking
 })
+// C
 const draw_buttons = (p: P5) => {
     p.push()
     p.rectMode(p.CENTER)
@@ -191,10 +195,10 @@ const run_feedout_async = () => {
     return new Promise(resolve => feedout_resolve = resolve)
 }
 export class StorylistScene implements Scene {
-    on_enter(p: P5): void {
+    on_enter(): void {
 
     }
-    draw(p: P5): void {
+    tick(): void {
         p.image(get_image("bg0.png"), 0, 0)
 
         update_bubbles()
@@ -214,7 +218,7 @@ export class StorylistScene implements Scene {
 
         clicking = false
     }
-    mousePressed(e: object, p: P5): void {
+    mouse_pressed(e: any): void {
         clicking = true
     }
 }

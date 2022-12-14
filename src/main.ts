@@ -7,35 +7,37 @@ import { preload_images } from "./images"
 
 const name_to_scene = {
     "Storylist": new StorylistScene(),
-    "Weocome": new WelcomeScene()
+    "Welcome": new WelcomeScene()
 }
-let scene: Scene = name_to_scene["Storylist"]
+let scene: Scene = undefined
 
 export const change_scene = (name: string) => {
     scene = name_to_scene[name]
-    scene.on_enter(p)
+    scene.on_enter()
 }
 
-const preload = (p: P5) => {
+change_scene("Welcome")
+
+const preload = () => {
     preload_images(p)
 }
-const setup = (p: P5) => {
+const setup = () => {
     p.createCanvas(1136, 640)
-    scene.on_enter(p)
+    scene.on_enter()
 }
 
-const draw = (p: P5) => {
-    scene.draw(p)
+const tick = () => {
+    scene.tick()
 }
-const mousePressed = (e: object, p: P5) => {
-    scene.mousePressed(e, p)
-}
-
-const sketch = (p: P5) => {
-    p.preload = () => preload(p)
-    p.setup = () => setup(p)
-    p.draw = () => draw(p)
-    p.mousePressed = (e: object) => mousePressed(e, p)
+const mouse_pressed = (e: object) => {
+    scene.mouse_pressed(e)
 }
 
-const p = new P5(sketch)
+const sketch = (_p:P5) => {
+    _p.preload = () => preload()
+    _p.setup = () => setup()
+    _p.draw = () => tick()
+    _p.mousePressed = (e: object) => mouse_pressed(e)
+}
+
+export const p = new P5(sketch)

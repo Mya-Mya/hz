@@ -1,14 +1,13 @@
 import { Scene } from "./Scene";
-import P5 from "p5"
 
-export class StoryScene implements Scene{
-    on_enter(p:P5): void {
-        
+export class StoryScene implements Scene {
+    on_enter(): void {
+
     }
-    draw(p: P5): void {
-        
+    tick(): void {
+
     }
-    mousePressed(e: object, p:P5): void {
-        
+    mouse_pressed(e: any): void {
+
     }
 }

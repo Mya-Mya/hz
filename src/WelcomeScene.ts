@@ -1,7 +1,7 @@
 import P5 from "p5"
 import { Scene } from "./Scene";
 import { get_image } from "./images"
-import { change_scene } from "./main"
+import { change_scene,p } from "./main"
 
 // starttext entity
 let starttext_anim = 0//component
@@ -84,10 +84,10 @@ const draw_feetout = (p: P5) => {
 }
 
 export class WelcomeScene implements Scene {
-    on_enter(p: P5): void {
+    on_enter(): void {
 
     }
-    draw(p: P5): void {
+    tick(): void {
         p.background(240)
         p.image(get_image("bg0.png"), 0, 0)
         p.push()
@@ -107,7 +107,7 @@ export class WelcomeScene implements Scene {
         update_ripples()
         draw_ripples(p)
     }
-    mousePressed(e: object, p: P5): void {
+    mouse_pressed(e: object): void {
         add_ripple(p.mouseX, p.mouseY)
         this.change()
     }
