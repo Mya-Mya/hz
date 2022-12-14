@@ -8,6 +8,7 @@ export const WHITE = () => p.color(255, 255, 255)
 export const LIGHTBLUE = () => p.color(108, 195, 239)
 export const ORANGE = () => p.color(255, 182, 97)
 export const BLACK = () => p.color(0, 0, 0)
+export const NAVY = () => p.color(5, 61, 89)
 export const brighter = (color: P5.Color) => {
     p.colorMode(p.HSB)
     const h = p.hue(color)
