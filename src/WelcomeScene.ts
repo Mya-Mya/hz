@@ -2,6 +2,7 @@ import P5 from "p5"
 import { Scene } from "./Scene";
 import { get_image } from "./images"
 import { change_scene, p } from "./main"
+import {add_ripple,draw_ripple_s,update_ripple_s} from "./ripple"
 import { BLACK, CANVAS_HEIGHT, CANVAS_WIDTH, LARGE_TEXTSIZE, LIGHTBLUE, NORMAL_TEXTSIZE, WHITE } from "./uiconstants";
 
 // starttext entity
@@ -19,36 +20,6 @@ const draw_starttext = () => {
     p.textSize(NORMAL_TEXTSIZE)
     p.text("Start", CANVAS_WIDTH/2,CANVAS_HEIGHT-50)
     p.pop()
-}
-
-// ripple entities
-let ripples: Ripple[] = []
-type Ripple = {
-    x: number,
-    y: number,
-    lifetime: number,
-}
-const add_ripple = (x: number, y: number) => ripples.push({
-    x, y, lifetime: 0,
-})
-const draw_ripples = () => {
-    p.push()
-    p.noFill()
-    p.strokeWeight(4)
-    p.blendMode(p.ADD)
-    ripples.forEach(ripple => {
-        const color = LIGHTBLUE()
-        color.setAlpha(255 * p.pow(1 - ripple.lifetime, 2))
-        p.stroke(color)
-        p.circle(ripple.x, ripple.y, 300 * p.sqrt(ripple.lifetime))
-    })
-    p.pop()
-}
-const update_ripples = () => {
-    ripples.forEach(ripple => {
-        ripple.lifetime += 0.02
-    })
-    ripples = ripples.filter(ripple => ripple.lifetime < 1)
 }
 
 //feedout entity
@@ -104,8 +75,8 @@ export class WelcomeScene implements Scene {
         update_feedout()
         draw_feetout()
 
-        update_ripples()
-        draw_ripples()
+        update_ripple_s()
+        draw_ripple_s()
     }
     mouse_pressed(e: object): void {
         add_ripple(p.mouseX, p.mouseY)
