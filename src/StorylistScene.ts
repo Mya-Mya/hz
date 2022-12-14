@@ -3,6 +3,7 @@ import { Scene } from "./Scene";
 import { get_image } from "./images"
 import { p } from "./main"
 import { add_ripple, update_ripple_s, draw_ripple_s } from "./ripple"
+import { LIGHTBLUE, ORANGE, brighter } from "./uiconstants"
 
 // Input entity
 let clicking: boolean = false
@@ -140,11 +141,11 @@ const draw_buttons = (p: P5) => {
     p.noStroke()
     buttons.forEach(b => {
         if (b.important) {
-            if (b.hover) p.fill(255, 202, 107)
-            else p.fill(255, 182, 97)
+            if (b.hover) p.fill(brighter(ORANGE()))
+            else p.fill(ORANGE())
         } else {
-            if (b.hover) p.fill(128, 215, 255)
-            else p.fill(108, 195, 239)
+            if (b.hover) p.fill(brighter(LIGHTBLUE()))
+            else p.fill(LIGHTBLUE())
         }
         p.circle(b.x - 40, b.y, BUTTON_HEIGHT)
         p.circle(b.x + 40, b.y, BUTTON_HEIGHT)
