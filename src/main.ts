@@ -40,7 +40,7 @@ const mouse_pressed = (e: object) => {
     scene.mouse_pressed(e)
 }
 
-const sketch = (_p:P5) => {
+const sketch = (_p: P5) => {
     _p.preload = () => preload()
     _p.setup = () => setup()
     _p.draw = () => tick()

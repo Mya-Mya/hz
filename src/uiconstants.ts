@@ -14,7 +14,7 @@ export const brighter = (color: P5.Color) => {
     const h = p.hue(color)
     const s = p.saturation(color)
     const b = p.brightness(color)
-    const new_color = p.color(h, s*0.4, b*1.1)
+    const new_color = p.color(h, s * 0.4, b * 1.1)
     p.colorMode(p.RGB)
     return new_color
 }
