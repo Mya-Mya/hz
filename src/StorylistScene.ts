@@ -2,6 +2,7 @@ import P5 from "p5"
 import { Scene } from "./Scene";
 import { get_image } from "./images"
 import { p } from "./main"
+import { add_ripple, update_ripple_s, draw_ripple_s } from "./ripple"
 
 // Input entity
 let clicking: boolean = false
@@ -216,9 +217,13 @@ export class StorylistScene implements Scene {
         update_feedout()
         draw_feedout(p)
 
+        update_ripple_s()
+        draw_ripple_s()
+
         clicking = false
     }
     mouse_pressed(e: any): void {
         clicking = true
+        add_ripple(p.mouseX, p.mouseY)
     }
 }
