@@ -3,7 +3,8 @@ import { Scene } from "./Scene";
 import { get_image } from "./images"
 import { p } from "./main"
 import { add_ripple, update_ripple_s, draw_ripple_s } from "./ripple"
-import { LIGHTBLUE, ORANGE, brighter } from "./uiconstants"
+import { Button, ButtonVariant, create_button, dispose_mouse_press_to_button_s, update_button_s, draw_button_s } from "./button"
+import { LIGHTBLUE, ORANGE, brighter, CANVAS_HEIGHT, CANVAS_WIDTH } from "./uiconstants"
 
 // Input entity
 let clicking: boolean = false
@@ -113,66 +114,21 @@ const draw_bubbles = (p: P5) => {
 }
 
 // Button entity
-const BUTTON_HEIGHT = 60
-const BUTTON_WIDTH = 150
-type Button = {
-    x: number
-    y: number
-    hover: boolean
-    clicked: boolean
-    text: string
-    important: boolean
-}
-const is_in_button = (x: number, y: number, b: Button) => (Math.abs(x - b.x) * 2 < BUTTON_WIDTH) && (Math.abs(y - b.y) * 2 < BUTTON_HEIGHT)
-const prev_button: Button = { x: 130, y: 500, hover: false, clicked: false, text: "<<", important: false }
-const next_button: Button = { x: 1136 - 130, y: 500, hover: false, clicked: false, text: ">>", important: false }
-const open_button: Button = { x: 1136 / 2, y: 500, hover: false, clicked: false, text: "開く", important: true }
-let buttons: Button[] = [prev_button, next_button, open_button]
-// C
-const update_buttons = (p: P5) => buttons.forEach(b => {
-    b.hover = is_in_button(p.mouseX, p.mouseY, b)
-    b.clicked = b.hover && clicking
+const prev_button: Button = create_button(130, CANVAS_HEIGHT - 50, "<<")
+const next_button: Button = create_button(CANVAS_WIDTH - 130, CANVAS_HEIGHT - 50, ">>")
+const open_button: Button = create_button(CANVAS_WIDTH / 2, CANVAS_HEIGHT - 50, "開く")
+open_button.variant = ButtonVariant.Important
+open_button.onclick_handler_s.push(() => run_feedout_async().then(resolve => alert("Feed out done.")))
+prev_button.onclick_handler_s.push(() => {
+    preview_index = (previews.length + preview_index - 1) % previews.length
+    start_preview_anim()
 })
-// C
-const draw_buttons = (p: P5) => {
-    p.push()
-    p.rectMode(p.CENTER)
-    p.textAlign(p.CENTER, p.CENTER)
-    p.noStroke()
-    buttons.forEach(b => {
-        if (b.important) {
-            if (b.hover) p.fill(brighter(ORANGE()))
-            else p.fill(ORANGE())
-        } else {
-            if (b.hover) p.fill(brighter(LIGHTBLUE()))
-            else p.fill(LIGHTBLUE())
-        }
-        p.circle(b.x - 40, b.y, BUTTON_HEIGHT)
-        p.circle(b.x + 40, b.y, BUTTON_HEIGHT)
-        p.rect(b.x, b.y, BUTTON_WIDTH - 80, BUTTON_HEIGHT)
-        p.fill("white")
-        p.text(b.text, b.x, b.y)
-    })
-    p.pop()
-}
+next_button.onclick_handler_s.push(() => {
+    preview_index = (preview_index + 1) % previews.length
+    start_preview_anim()
+})
+let buttons: Button[] = [prev_button, next_button, open_button]
 
-// preview switch switcher
-const preview_switch_watcher = () => {
-    if (next_button.clicked) preview_index = (preview_index + 1) % previews.length
-    if (prev_button.clicked) preview_index = (previews.length + preview_index - 1) % previews.length
-    if (next_button.clicked || prev_button.clicked) start_preview_anim()
-}
-
-// openbutton watcher
-const openbutton_watcher = async () => {
-    if (open_button.clicked) {
-        start_preview_anim()
-        add_multiple_bubbles(1136 / 2, 320)
-        await new Promise(resolve => setTimeout(resolve, 200))
-        await run_feedout_async()
-        alert("Feedout End")
-    }
-}
 // feedout
 let feedout_t = 0
 let feedout_runnning = false
@@ -209,11 +165,8 @@ export class StorylistScene implements Scene {
         update_preview_anim(p)
         draw_preview(p)
 
-        update_buttons(p)
-        draw_buttons(p)
-
-        preview_switch_watcher()
-        openbutton_watcher()
+        update_button_s(buttons, p.mouseX, p.mouseY)
+        draw_button_s(buttons)
 
         update_feedout()
         draw_feedout(p)
@@ -226,5 +179,6 @@ export class StorylistScene implements Scene {
     mouse_pressed(e: any): void {
         clicking = true
         add_ripple(p.mouseX, p.mouseY)
+        dispose_mouse_press_to_button_s(buttons)
     }
 }
