@@ -1,7 +1,8 @@
 import P5 from "p5"
 import { Scene } from "./Scene";
 import { get_image } from "./images"
-import { change_scene,p } from "./main"
+import { change_scene, p } from "./main"
+import { BLACK, CANVAS_HEIGHT, CANVAS_WIDTH, LARGE_TEXTSIZE, LIGHTBLUE, NORMAL_TEXTSIZE, WHITE } from "./uiconstants";
 
 // starttext entity
 let starttext_anim = 0//component
@@ -9,7 +10,7 @@ const update_starttext_brightness = () => {//system
     starttext_anim += 0.01
     if (starttext_anim > 1) starttext_anim = 0
 }
-const draw_starttext = (p: P5) => {
+const draw_starttext = () => {
     p.push()
     p.textAlign(p.CENTER)
     p.fill(108, 195, 239, starttext_anim * 255)
@@ -28,7 +29,7 @@ type Ripple = {
 const add_ripple = (x: number, y: number) => ripples.push({
     x, y, lifetime: 0,
 })
-const draw_ripples = (p: P5) => {
+const draw_ripples = () => {
     p.push()
     p.noFill()
     p.strokeWeight(4)
@@ -68,7 +69,7 @@ const update_feedout = () => {
         }
     }
 }
-const draw_feetout = (p: P5) => {
+const draw_feetout = () => {
     if (feedout_running) {
         p.push()
         p.fill(0, 0, 0, 255 * feedout_t)
@@ -93,13 +94,13 @@ export class WelcomeScene implements Scene {
         p.text("Houlex続営機関", 500, 360)
         p.pop()
         update_starttext_brightness()
-        draw_starttext(p)
+        draw_starttext()
 
         update_feedout()
-        draw_feetout(p)
+        draw_feetout()
 
         update_ripples()
-        draw_ripples(p)
+        draw_ripples()
     }
     mouse_pressed(e: object): void {
         add_ripple(p.mouseX, p.mouseY)
