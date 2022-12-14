@@ -24,15 +24,9 @@ type Ripple = {
     x: number,
     y: number,
     lifetime: number,
-    rr: number,
-    gr: number,
-    br: number
 }
 const add_ripple = (x: number, y: number) => ripples.push({
     x, y, lifetime: 0,
-    rr: 0.7 + Math.random() * 0.6,
-    gr: 0.7 + Math.random() * 0.6,
-    br: 0.7 + Math.random() * 0.6
 })
 const draw_ripples = (p: P5) => {
     p.push()
