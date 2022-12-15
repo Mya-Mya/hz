@@ -3,10 +3,10 @@ import { View } from "./View";
 import { get_image } from "./images"
 import { p } from "./main"
 import { add_ripple, update_ripple_s, draw_ripple_s } from "./ripple"
-import { Button, ButtonVariant, create_button, dispose_mouse_press_to_button_s, update_button_s, draw_button_s, Button_ } from "./button"
+import { ButtonVariant, Button_ } from "./button"
 import { LIGHTBLUE, ORANGE, brighter, CANVAS_HEIGHT, CANVAS_WIDTH } from "./uiconstants"
-import { add_2selections_dialog } from "./dialog"
-import { fade_service } from "./services";
+import { Dialog_ } from "./dialog"
+import { fade_service,modal_manage_service } from "./services";
 
 // Input entity
 let clicking: boolean = false
@@ -121,14 +121,17 @@ const next_button: Button_ = new Button_(CANVAS_WIDTH - 130, CANVAS_HEIGHT - 50,
 const open_button: Button_ = new Button_(CANVAS_WIDTH / 2, CANVAS_HEIGHT - 50, "開く")
 open_button.set_variant(ButtonVariant.Important)
 open_button.add_onclick_handler(() => {
-    fade_service.start_out(() => { })
-    add_multiple_bubbles(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2)
-    setTimeout(() => {
-        add_2selections_dialog("再生しますか？", "いいえ", "はい", true,
-            () => { },
-            () => { }
-        )
-    }, 500)
+    const dialog = new Dialog_("再生しますか？")
+    dialog.add_button("いいえ",ButtonVariant.Normal,()=>{})
+    dialog.add_button("はい",ButtonVariant.Important,()=>{
+        fade_service.start_out(()=>{
+            alert("Fade out done")
+        })
+    })
+    dialog.set_on_close_handler(()=>{
+        modal_manage_service.delete(dialog)
+    })
+    modal_manage_service.add(dialog)
 })
 prev_button.add_onclick_handler(() => {
     preview_index = (previews.length + preview_index - 1) % previews.length
