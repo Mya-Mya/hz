@@ -9,7 +9,7 @@ const BUTTON_AREA_WIDTH = 600
 const DIALOG_HEIGHT = 330
 const BUTTON_Y = (CANVAS_HEIGHT + DIALOG_HEIGHT) / 2 - 50
 const BUTTON_AREA_LEFT = (CANVAS_WIDTH - BUTTON_AREA_WIDTH) / 2
-
+/*
 class Dialog {
     public button_s: Button[] = []
     public is_opening: boolean = true
@@ -107,6 +107,7 @@ export const dispose_mouse_press_to_dialog = (): boolean => {
 export const is_dialog_showing = () => dialogs.length != 0
 export const remove_current_dialog = (dialog: Dialog) => {
     dialogs = dialogs.filter(_dialog => _dialog != dialog)
+}*/
 
 export class Dialog_ extends View {
     /**

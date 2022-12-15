@@ -10,7 +10,7 @@ const L2 = (BUTTON_WIDTH - BUTTON_HEIGHT) / 2
 const L1 = -L2
 const RECT_W = BUTTON_WIDTH - BUTTON_HEIGHT
 
-export type Button = {
+/*export type Button = {
     x: number,
     y: number,
     text: string,
@@ -24,11 +24,11 @@ export const create_button = (x: number, y: number, text: string): Button => ({
     hover: false,
     onclick_handler_s: []
 })
-
+*/
 export enum ButtonVariant {
     Normal,
     Important
-}
+}/*
 const button_color_s = {
     [ButtonVariant.Normal]: LIGHTBLUE,
     [ButtonVariant.Important]: ORANGE
@@ -64,7 +64,7 @@ export const update_button_s = (button_s: Button[], mouse_x: number, mouse_y: nu
 })
 export const dispose_mouse_press_to_button_s = (button_s: Button[]) => button_s.forEach(button => {
     if (button.hover) button.onclick_handler_s.forEach(f => f())
-})
+})*/
 
 export class Button_ extends View {
     private variant: ButtonVariant = ButtonVariant.Normal
