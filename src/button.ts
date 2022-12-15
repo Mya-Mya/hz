@@ -66,7 +66,7 @@ export const dispose_mouse_press_to_button_s = (button_s: Button[]) => button_s.
     if (button.hover) button.onclick_handler_s.forEach(f => f())
 })*/
 
-export class Button_ extends View {
+export class Button extends View {
     private variant: ButtonVariant = ButtonVariant.Normal
     private hover: boolean = false
     private onclick_handler_s: (() => void)[] = []

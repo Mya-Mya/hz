@@ -1,6 +1,6 @@
 import P5 from "p5"
 import { backIn, backOut, backInOut } from "eases"
-import {ButtonVariant, Button_ } from "./button"
+import {ButtonVariant, Button } from "./button"
 import { p } from "./main"
 import { BLACK, CANVAS_HEIGHT, CANVAS_WIDTH, NAVY, NORMAL_TEXTSIZE, WHITE } from "./uiconstants"
 import { View } from "./View"
@@ -109,7 +109,7 @@ export const remove_current_dialog = (dialog: Dialog) => {
     dialogs = dialogs.filter(_dialog => _dialog != dialog)
 }*/
 
-export class Dialog_ extends View {
+export class Dialog extends View {
     /**
      * Press -> Call handler Flow
      * 1. Press the Button
@@ -117,7 +117,7 @@ export class Dialog_ extends View {
      * 3. Finish closing transition
      * 4. Call on_select handler
      */
-    private button_s: Button_[] = []
+    private button_s: Button[] = []
 
     private is_opening: boolean = true
     private opening_s: number = 0
@@ -129,7 +129,7 @@ export class Dialog_ extends View {
 
     constructor(private text: string) { super() }
     add_button(text: string, variant: ButtonVariant, on_select: () => void) {
-        const new_button = new Button_(0, BUTTON_Y, text)
+        const new_button = new Button(0, BUTTON_Y, text)
         new_button.set_variant(variant)
         new_button.add_onclick_handler(() => {
             this.calling_on_select_handler = on_select

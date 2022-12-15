@@ -3,9 +3,9 @@ import { View } from "./View";
 import { get_image } from "./images"
 import { p } from "./main"
 import { add_ripple, update_ripple_s, draw_ripple_s } from "./ripple"
-import { ButtonVariant, Button_ } from "./button"
+import { ButtonVariant, Button } from "./button"
 import { LIGHTBLUE, ORANGE, brighter, CANVAS_HEIGHT, CANVAS_WIDTH } from "./uiconstants"
-import { Dialog_ } from "./dialog"
+import { Dialog } from "./dialog"
 import { fade_service,modal_manage_service } from "./services";
 
 // Input entity
@@ -116,12 +116,12 @@ const draw_bubbles = (p: P5) => {
 }
 
 // Button entity
-const prev_button: Button_ = new Button_(130,CANVAS_HEIGHT-50,"<<")
-const next_button: Button_ = new Button_(CANVAS_WIDTH - 130, CANVAS_HEIGHT - 50, ">>")
-const open_button: Button_ = new Button_(CANVAS_WIDTH / 2, CANVAS_HEIGHT - 50, "開く")
+const prev_button: Button = new Button(130,CANVAS_HEIGHT-50,"<<")
+const next_button: Button = new Button(CANVAS_WIDTH - 130, CANVAS_HEIGHT - 50, ">>")
+const open_button: Button = new Button(CANVAS_WIDTH / 2, CANVAS_HEIGHT - 50, "開く")
 open_button.set_variant(ButtonVariant.Important)
 open_button.add_onclick_handler(() => {
-    const dialog = new Dialog_("再生しますか？")
+    const dialog = new Dialog("再生しますか？")
     dialog.add_button("いいえ",ButtonVariant.Normal,()=>{})
     dialog.add_button("はい",ButtonVariant.Important,()=>{
         fade_service.start_out(()=>{
