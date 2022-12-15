@@ -24,6 +24,13 @@ class ModalManageService extends View {
     }
     tick(): void {
         if (this.has_active) {
+            const color = BLACK()
+            p.push()
+            color.setAlpha(128)
+            p.fill(color)
+            p.noStroke()
+            p.rect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT)
+            p.pop()
             this.active_modal.tick()
         }
     }
