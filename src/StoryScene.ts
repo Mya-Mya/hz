@@ -1,13 +1,13 @@
-import { Scene } from "./Scene";
+import { View } from "./View";
 
-export class StoryScene implements Scene {
+export class StoryScene extends View {
     on_enter(): void {
 
     }
     tick(): void {
 
     }
-    mouse_pressed(e: any): void {
-
+    mouse_pressed(e: any) {
+        return false
     }
 }

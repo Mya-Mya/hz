@@ -1,5 +1,5 @@
 import P5 from "p5"
-import { Scene } from "./Scene";
+import { View } from "./View";
 import { get_image } from "./images"
 import { change_scene, p } from "./main"
 import {add_ripple,draw_ripple_s,update_ripple_s} from "./ripple"
@@ -55,7 +55,7 @@ const draw_feetout = () => {
     }
 }
 
-export class WelcomeScene implements Scene {
+export class WelcomeScene extends View {
     on_enter(): void {
 
     }
@@ -78,13 +78,14 @@ export class WelcomeScene implements Scene {
         update_ripple_s()
         draw_ripple_s()
     }
-    mouse_pressed(e: object): void {
+    mouse_pressed(e: object) {
         add_ripple(p.mouseX, p.mouseY)
         this.change()
     }
     async change() {
         await start_feedout_async()
         change_scene("Storylist")
+        return false
     }
 
 }

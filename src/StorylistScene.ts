@@ -1,5 +1,5 @@
 import P5 from "p5"
-import { Scene } from "./Scene";
+import { View } from "./View";
 import { get_image } from "./images"
 import { p } from "./main"
 import { add_ripple, update_ripple_s, draw_ripple_s } from "./ripple"
@@ -161,7 +161,7 @@ const run_feedout_async = () => {
     feedout_runnning = true
     return new Promise(resolve => feedout_resolve = resolve)
 }
-export class StorylistScene implements Scene {
+export class StorylistScene extends View {
     on_enter(): void {
 
     }
@@ -185,9 +185,10 @@ export class StorylistScene implements Scene {
 
         clicking = false
     }
-    mouse_pressed(e: any): void {
+    mouse_pressed(e: any) {
         clicking = true
         add_ripple(p.mouseX, p.mouseY)
         dispose_mouse_press_to_button_s(buttons)
+        return false
     }
 }

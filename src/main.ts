@@ -1,5 +1,5 @@
 import P5 from "p5"
-import { Scene } from "./Scene"
+import { View } from "./View"
 import { WelcomeScene } from "./WelcomeScene"
 import { StorylistScene } from "./StorylistScene"
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "./uiconstants"
@@ -10,7 +10,7 @@ const name_to_scene = {
     "Storylist": new StorylistScene(),
     "Welcome": new WelcomeScene()
 }
-let scene: Scene = undefined
+let scene: View = undefined
 
 export const change_scene = (name: string) => {
     scene = name_to_scene[name]
