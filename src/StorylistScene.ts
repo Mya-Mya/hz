@@ -138,32 +138,9 @@ next_button.onclick_handler_s.push(() => {
 })
 let buttons: Button[] = [prev_button, next_button, open_button]
 
-// feedout
-let feedout_t = 0
-let feedout_runnning = false
-let feedout_resolve = undefined
-const draw_feedout = (p: P5) => {
-    p.push()
-    p.fill(0, 0, 0, feedout_t * 255)
-    p.rect(0, 0, p.width, p.height)
-    p.pop()
-}
-const update_feedout = () => {
-    if (feedout_runnning) {
-        feedout_t += 0.02
-        if (feedout_t >= 1) {
-            feedout_runnning = false
-            feedout_resolve()
-        }
-    }
-}
-const run_feedout_async = () => {
-    feedout_runnning = true
-    return new Promise(resolve => feedout_resolve = resolve)
-}
 export class StorylistScene extends View {
     on_enter(): void {
-
+        fade_service.start_in(() => { })
     }
     tick(): void {
         p.image(get_image("bg0.png"), 0, 0)
@@ -176,9 +153,6 @@ export class StorylistScene extends View {
 
         update_button_s(buttons, p.mouseX, p.mouseY)
         draw_button_s(buttons)
-
-        update_feedout()
-        draw_feedout(p)
 
         update_ripple_s()
         draw_ripple_s()
