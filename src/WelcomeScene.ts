@@ -4,6 +4,7 @@ import { get_image } from "./images"
 import { change_scene, p } from "./main"
 import {add_ripple,draw_ripple_s,update_ripple_s} from "./ripple"
 import { BLACK, CANVAS_HEIGHT, CANVAS_WIDTH, LARGE_TEXTSIZE, LIGHTBLUE, NORMAL_TEXTSIZE, WHITE } from "./uiconstants";
+import {fade_service} from "./services"
 
 // starttext entity
 let starttext_anim = 0//component
@@ -22,42 +23,9 @@ const draw_starttext = () => {
     p.pop()
 }
 
-//feedout entity
-let feedout_running = false
-let feedout_t = 0
-let feedout_resolve: () => void = undefined
-let feedout_promise: Promise<void> = undefined
-const start_feedout_async = (): Promise<void> => {
-    if (!feedout_running) {
-        feedout_running = true
-        feedout_promise = new Promise(resolve => feedout_resolve = resolve)
-    }
-    return feedout_promise
-}
-const update_feedout = () => {
-    if (feedout_running) {
-        feedout_t += 0.03
-        if (feedout_t >= 1) {
-            feedout_running = false
-            feedout_t = 0
-            feedout_resolve()
-        }
-    }
-}
-const draw_feetout = () => {
-    if (feedout_running) {
-        p.push()
-        const color = BLACK()
-        color.setAlpha(255 * feedout_t)
-        p.fill(color)
-        p.rect(0, 0, p.width, p.height)
-        p.pop()
-    }
-}
-
 export class WelcomeScene extends View {
     on_enter(): void {
-
+        fade_service.start_in(()=>{})
     }
     tick(): void {
         p.image(get_image("bg0.png"), 0, 0)
@@ -72,20 +40,14 @@ export class WelcomeScene extends View {
         update_starttext_brightness()
         draw_starttext()
 
-        update_feedout()
-        draw_feetout()
-
         update_ripple_s()
         draw_ripple_s()
     }
     mouse_pressed(e: object) {
         add_ripple(p.mouseX, p.mouseY)
-        this.change()
-    }
-    async change() {
-        await start_feedout_async()
-        change_scene("Storylist")
+        fade_service.start_out(()=>{
+            alert("Feed out done")
+        })
         return false
     }
-
 }
