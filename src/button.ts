@@ -71,9 +71,9 @@ export class Button_ extends View {
     private hover: boolean = false
     private onclick_handler_s: (() => void)[] = []
     constructor(
-        private x: number,
-        private y: number,
-        private text: string,
+        public x: number,
+        public y: number,
+        public text: string,
     ) { super() }
     add_onclick_handler(handler: () => void) {
         this.onclick_handler_s.push(handler)
