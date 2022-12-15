@@ -1,7 +1,7 @@
 import P5 from "p5"
 import { View } from "./View";
 import { get_image } from "./images"
-import { change_scene, p } from "./main"
+import { p } from "./main"
 import {add_ripple,draw_ripple_s,update_ripple_s} from "./ripple"
 import { BLACK, CANVAS_HEIGHT, CANVAS_WIDTH, LARGE_TEXTSIZE, LIGHTBLUE, NORMAL_TEXTSIZE, WHITE } from "./uiconstants";
 import {fade_service} from "./services"

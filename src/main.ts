@@ -1,50 +1,30 @@
 import P5 from "p5"
-import { View } from "./View"
-import { WelcomeScene } from "./WelcomeScene"
 import { StorylistScene } from "./StorylistScene"
 import { CANVAS_WIDTH, CANVAS_HEIGHT } from "./uiconstants"
-import { is_dialog_showing, update_dialog, draw_dialog, dispose_mouse_press_to_dialog } from "./dialog"
 import { preload_images } from "./images"
+import { scene_manage_service, modal_manage_service, fade_service } from "./services"
 
-const name_to_scene = {
-    "Storylist": new StorylistScene(),
-    "Welcome": new WelcomeScene()
-}
-let scene: View = undefined
+scene_manage_service.set_scene(new StorylistScene())
 
-export const change_scene = (name: string) => {
-    scene = name_to_scene[name]
-    scene.on_enter()
-}
-
-change_scene("Welcome")
-
-const preload = () => {
-    preload_images(p)
-}
-const setup = () => {
-    p.createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT)
-    scene.on_enter()
-}
-
-const tick = () => {
-    scene.tick()
-    update_dialog(p.mouseX, p.mouseY)
-    draw_dialog()
-}
-const mouse_pressed = (e: object) => {
-    if (is_dialog_showing()) {
-        dispose_mouse_press_to_dialog()
-        return
-    }
-    scene.mouse_pressed(e)
-}
-
+const service_s_from_bottom = [scene_manage_service, modal_manage_service, fade_service]
+const service_s_from_top = [...service_s_from_bottom].reverse()
 const sketch = (_p: P5) => {
-    _p.preload = () => preload()
-    _p.setup = () => setup()
-    _p.draw = () => tick()
-    _p.mousePressed = (e: object) => mouse_pressed(e)
+    _p.preload = () => {
+        preload_images(p)
+    }
+    _p.setup = () => {
+        p.createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT)
+        service_s_from_bottom.forEach(s => s.on_enter())
+    }
+    _p.draw = () => {
+        service_s_from_bottom.forEach(s => s.tick())
+    }
+    _p.mousePressed = (e: object) => {
+        for (const s of service_s_from_top) {
+            const require_exclusion = s.mouse_pressed(e)
+            if (require_exclusion) return
+        }
+    }
 }
 
 export const p = new P5(sketch)
