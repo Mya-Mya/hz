@@ -3,7 +3,7 @@ import { View } from "./View";
 import { get_image } from "./images"
 import { p } from "./main"
 import { add_ripple, update_ripple_s, draw_ripple_s } from "./ripple"
-import { Button, ButtonVariant, create_button, dispose_mouse_press_to_button_s, update_button_s, draw_button_s } from "./button"
+import { Button, ButtonVariant, create_button, dispose_mouse_press_to_button_s, update_button_s, draw_button_s, Button_ } from "./button"
 import { LIGHTBLUE, ORANGE, brighter, CANVAS_HEIGHT, CANVAS_WIDTH } from "./uiconstants"
 import { add_2selections_dialog } from "./dialog"
 import { fade_service } from "./services";
@@ -116,11 +116,11 @@ const draw_bubbles = (p: P5) => {
 }
 
 // Button entity
-const prev_button: Button = create_button(130, CANVAS_HEIGHT - 50, "<<")
-const next_button: Button = create_button(CANVAS_WIDTH - 130, CANVAS_HEIGHT - 50, ">>")
-const open_button: Button = create_button(CANVAS_WIDTH / 2, CANVAS_HEIGHT - 50, "開く")
-open_button.variant = ButtonVariant.Important
-open_button.onclick_handler_s.push(() => {
+const prev_button: Button_ = new Button_(130,CANVAS_HEIGHT-50,"<<")
+const next_button: Button_ = new Button_(CANVAS_WIDTH - 130, CANVAS_HEIGHT - 50, ">>")
+const open_button: Button_ = new Button_(CANVAS_WIDTH / 2, CANVAS_HEIGHT - 50, "開く")
+open_button.set_variant(ButtonVariant.Important)
+open_button.add_onclick_handler(() => {
     fade_service.start_out(() => { })
     add_multiple_bubbles(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2)
     setTimeout(() => {
@@ -130,15 +130,14 @@ open_button.onclick_handler_s.push(() => {
         )
     }, 500)
 })
-prev_button.onclick_handler_s.push(() => {
+prev_button.add_onclick_handler(() => {
     preview_index = (previews.length + preview_index - 1) % previews.length
     start_preview_anim()
 })
-next_button.onclick_handler_s.push(() => {
+next_button.add_onclick_handler(() => {
     preview_index = (preview_index + 1) % previews.length
     start_preview_anim()
 })
-let buttons: Button[] = [prev_button, next_button, open_button]
 
 export class StorylistScene extends View {
     on_enter(): void {
@@ -153,8 +152,9 @@ export class StorylistScene extends View {
         update_preview_anim(p)
         draw_preview(p)
 
-        update_button_s(buttons, p.mouseX, p.mouseY)
-        draw_button_s(buttons)
+        prev_button.tick()
+        next_button.tick()
+        open_button.tick()
 
         update_ripple_s()
         draw_ripple_s()
@@ -164,7 +164,9 @@ export class StorylistScene extends View {
     mouse_pressed(e: any) {
         clicking = true
         add_ripple(p.mouseX, p.mouseY)
-        dispose_mouse_press_to_button_s(buttons)
+        prev_button.mouse_pressed(e)
+        next_button.mouse_pressed(e)
+        open_button.mouse_pressed(e)
         return false
     }
 }
