@@ -6,6 +6,7 @@ import { add_ripple, update_ripple_s, draw_ripple_s } from "./ripple"
 import { Button, ButtonVariant, create_button, dispose_mouse_press_to_button_s, update_button_s, draw_button_s } from "./button"
 import { LIGHTBLUE, ORANGE, brighter, CANVAS_HEIGHT, CANVAS_WIDTH } from "./uiconstants"
 import { add_2selections_dialog } from "./dialog"
+import { fade_service } from "./services";
 
 // Input entity
 let clicking: boolean = false
@@ -120,11 +121,12 @@ const next_button: Button = create_button(CANVAS_WIDTH - 130, CANVAS_HEIGHT - 50
 const open_button: Button = create_button(CANVAS_WIDTH / 2, CANVAS_HEIGHT - 50, "開く")
 open_button.variant = ButtonVariant.Important
 open_button.onclick_handler_s.push(() => {
+    fade_service.start_out(() => { })
     add_multiple_bubbles(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2)
     setTimeout(() => {
         add_2selections_dialog("再生しますか？", "いいえ", "はい", true,
             () => { },
-            () => run_feedout_async()
+            () => { }
         )
     }, 500)
 })
