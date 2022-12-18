@@ -59,12 +59,14 @@ class FadeService extends View {
     private ds: number = 0.02
 
     tick(): void {
-        if (!this.is_active) return
-        this.s += this.ds
-        if (this.s >= 1) {
-            this.is_active = false
-            if (this.on_done) this.on_done()
-            return
+        if (this.fade_type != "stable") {
+            if (!this.is_active) return
+            this.s += this.ds
+            if (this.s >= 1) {
+                this.is_active = false
+                if (this.on_done) this.on_done()
+                return
+            }
         }
 
         p.push()
@@ -87,8 +89,10 @@ class FadeService extends View {
     start_in(on_done: () => void): void {
         this.start(on_done, "in")
     }
+    start_stable(): void {
+        this.start(() => { }, "stable")
+    }
     private start(on_done: () => void, fade_type: string) {
-        if (this.is_active) return
         this.fade_type = fade_type
         this.s = 0
         this.is_active = true
