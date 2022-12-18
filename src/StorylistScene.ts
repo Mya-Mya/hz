@@ -6,22 +6,14 @@ import { add_ripple, update_ripple_s, draw_ripple_s } from "./ripple"
 import { ButtonVariant, Button } from "./button"
 import { LIGHTBLUE, ORANGE, brighter, CANVAS_HEIGHT, CANVAS_WIDTH } from "./uiconstants"
 import { Dialog } from "./dialog"
-import { fade_service,modal_manage_service } from "./services";
+import { fade_service, modal_manage_service } from "./services";
+import { storiesmanager } from "./model"
+import StoryInfo from "./storyapi/StoryInfo";
 
-// Input entity
-let clicking: boolean = false
+let storyinfo_s: StoryInfo[] = undefined
 
-// Preview entity
-type Preview = {
-    title: string,
-}
-const previews: Preview[] = [
-    { title: "序章" },
-    { title: "雷雨の夜に" },
-    { title: "何か" }
-]
 // C preview_index entity
-let preview_index = 0
+let storyinfo_index = 0
 
 // T preview animation entity
 let preview_anim_t = 0
@@ -44,13 +36,14 @@ type Bubble = {
 let bubbles: Bubble[] = []
 
 const draw_preview = (p: P5) => {
+    if (storyinfo_s == undefined) return
     p.push()
     p.textAlign(p.CENTER, p.CENTER)
     p.fill(255, 255, 255, preview_anim_t * 255)
     p.textSize(50 + 50 * p.pow(preview_anim_t, 0.2))
-    p.text(previews[preview_index].title, p.width * 0.5, p.height * 0.5)
+    p.text(storyinfo_s[storyinfo_index].title, p.width * 0.5, p.height * 0.5)
     p.textSize(18)
-    p.text(`${preview_index + 1}/${previews.length}`, p.width * 0.5, p.height * 0.5 + 70)
+    p.text(`${storyinfo_index + 1}/${storyinfo_s.length}`, p.width * 0.5, p.height * 0.5 + 70)
     p.pop()
 }
 
@@ -116,35 +109,41 @@ const draw_bubbles = (p: P5) => {
 }
 
 // Button entity
-const prev_button: Button = new Button(130,CANVAS_HEIGHT-50,"<<")
+const prev_button: Button = new Button(130, CANVAS_HEIGHT - 50, "<<")
 const next_button: Button = new Button(CANVAS_WIDTH - 130, CANVAS_HEIGHT - 50, ">>")
 const open_button: Button = new Button(CANVAS_WIDTH / 2, CANVAS_HEIGHT - 50, "開く")
 open_button.set_variant(ButtonVariant.Important)
 open_button.add_onclick_handler(() => {
     const dialog = new Dialog("再生しますか？")
-    dialog.add_button("いいえ",ButtonVariant.Normal,()=>{})
-    dialog.add_button("はい",ButtonVariant.Important,()=>{
-        fade_service.start_out(()=>{
+    dialog.add_button("いいえ", ButtonVariant.Normal, () => { })
+    dialog.add_button("はい", ButtonVariant.Important, () => {
+        fade_service.start_out(() => {
             alert("Fade out done")
         })
     })
-    dialog.set_on_close_handler(()=>{
+    dialog.set_on_close_handler(() => {
         modal_manage_service.delete(dialog)
     })
     modal_manage_service.add(dialog)
 })
 prev_button.add_onclick_handler(() => {
-    preview_index = (previews.length + preview_index - 1) % previews.length
+    storyinfo_index = (storyinfo_s.length + storyinfo_index - 1) % storyinfo_s.length
     start_preview_anim()
+    add_multiple_bubbles(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2)
 })
 next_button.add_onclick_handler(() => {
-    preview_index = (preview_index + 1) % previews.length
+    storyinfo_index = (storyinfo_index + 1) % storyinfo_s.length
     start_preview_anim()
+    add_multiple_bubbles(CANVAS_WIDTH / 2, CANVAS_HEIGHT / 2)
 })
 
 export class StorylistScene extends View {
     on_enter(): void {
-        fade_service.start_in(() => { })
+        fade_service.start_stable()
+        storiesmanager.get_info_s().then(_storyinfo_s => {
+            fade_service.start_in(() => { })
+            storyinfo_s = _storyinfo_s
+        })
     }
     tick(): void {
         p.image(get_image("bg0.png"), 0, 0)
@@ -162,10 +161,8 @@ export class StorylistScene extends View {
         update_ripple_s()
         draw_ripple_s()
 
-        clicking = false
     }
     mouse_pressed(e: any) {
-        clicking = true
         add_ripple(p.mouseX, p.mouseY)
         prev_button.mouse_pressed(e)
         next_button.mouse_pressed(e)
