@@ -9,7 +9,7 @@ import { Dialog } from "./dialog"
 import { fade_service, modal_manage_service, scene_manage_service } from "./services";
 import { storiesmanager, set_choosing_index } from "./model"
 import StoryInfo from "./storyapi/StoryInfo";
-import { StoryScene } from "./StoryScene";
+import StoryScene from "./scenes/storyscene/StoryScene";
 
 let storyinfo_s: StoryInfo[] = undefined
 
