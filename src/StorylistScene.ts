@@ -6,9 +6,10 @@ import { add_ripple, update_ripple_s, draw_ripple_s } from "./ripple"
 import { ButtonVariant, Button } from "./button"
 import { LIGHTBLUE, ORANGE, brighter, CANVAS_HEIGHT, CANVAS_WIDTH } from "./uiconstants"
 import { Dialog } from "./dialog"
-import { fade_service, modal_manage_service } from "./services";
-import { storiesmanager } from "./model"
+import { fade_service, modal_manage_service, scene_manage_service } from "./services";
+import { storiesmanager, set_choosing_index } from "./model"
 import StoryInfo from "./storyapi/StoryInfo";
+import { StoryScene } from "./StoryScene";
 
 let storyinfo_s: StoryInfo[] = undefined
 
@@ -118,7 +119,8 @@ open_button.add_onclick_handler(() => {
     dialog.add_button("いいえ", ButtonVariant.Normal, () => { })
     dialog.add_button("はい", ButtonVariant.Important, () => {
         fade_service.start_out(() => {
-            alert("Fade out done")
+            set_choosing_index(storyinfo_s[storyinfo_index].index)
+            scene_manage_service.set_scene(new StoryScene())
         })
     })
     dialog.set_on_close_handler(() => {
