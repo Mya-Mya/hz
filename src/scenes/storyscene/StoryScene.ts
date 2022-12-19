@@ -8,10 +8,15 @@ import { StorylistScene } from "../../StorylistScene";
 import IStoryScene from "./IStoryScene";
 import StoryPresenter from "./StoryPresenter";
 import GotoNextPageArrow from "./GotoNextPageArrow";
+import { Button } from "../../button";
+import LogDialog from "./LogDialog";
+import LogPresenter from "./LogPresenter";
 
 export default class StoryScene extends View implements IStoryScene {
     private presenter = new StoryPresenter(this)
     private gotonextpagearrow = new GotoNextPageArrow(this.presenter)
+    private log_button = new Button(CANVAS_WIDTH - 100, 100, "ログ")
+    private exit_button = new Button(100, 100, "中断")
     on_enter(): void {
         fade_service.start_stable()
         this.presenter.load_story().then(value => fade_service.start_in(() => { }))
@@ -36,10 +41,19 @@ export default class StoryScene extends View implements IStoryScene {
         p.line(-370, -50, 370, -50)
         p.pop()
 
+        this.log_button.tick()
+        this.exit_button.tick()
+
         this.gotonextpagearrow.tick()
     }
     mouse_pressed(e: any) {
-        this.presenter.click()
+        if (this.log_button.mouse_pressed(e)) {
+            new LogDialog(new LogPresenter(this.presenter)).on_enter()
+        } else if (this.exit_button.mouse_pressed(e)) {
+            this.back_to_storylist_scene()
+        } else {
+            this.presenter.click()
+        }
         return false
     }
     ask_story_index(): number {
