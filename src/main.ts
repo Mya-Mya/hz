@@ -6,7 +6,7 @@ import { scene_manage_service, modal_manage_service, fade_service } from "./serv
 import { WelcomeScene } from "./WelcomeScene"
 import StoryScene from "./scenes/storyscene/StoryScene"
 
-scene_manage_service.set_scene(new StoryScene())
+scene_manage_service.set_scene(new WelcomeScene())
 
 const service_s_from_bottom = [scene_manage_service, modal_manage_service, fade_service]
 const service_s_from_top = [...service_s_from_bottom].reverse()
