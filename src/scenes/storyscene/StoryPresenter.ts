@@ -35,7 +35,10 @@ export default class StoryPresenter {
     }
     go_to_next_page(): void {
         if (this.is_last_page()) this.view.back_to_storylist_scene()
-        this.index++
+        this.go_to_page(this.index + 1)
+    }
+    go_to_page(page_index: number): void {
+        this.index = page_index
         this.content_animation_frame = 0
         this.content_animation_running = true
     }
@@ -45,6 +48,7 @@ export default class StoryPresenter {
             this.content_animation_running = this.get_animated_content() != this.get_full_content()
         }
     }
+    get current_index(){return this.index}
     get_page(): Page {
         if (this.story && this.index < this.story.pages.length) return this.story.pages[this.index]
         return undefined
@@ -52,6 +56,9 @@ export default class StoryPresenter {
     get_full_content(): string {
         const page = this.get_page()
         return page ? page.content : ""
+    }
+    get_page_by_index(page_index:number): Page {
+        return this.story.pages[page_index]
     }
     get_animated_content(): string {
         return this.content_animation_running ?
