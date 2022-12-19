@@ -4,7 +4,8 @@ import { get_image } from "./images"
 import { p } from "./main"
 import {add_ripple,draw_ripple_s,update_ripple_s} from "./ripple"
 import { BLACK, CANVAS_HEIGHT, CANVAS_WIDTH, LARGE_TEXTSIZE, LIGHTBLUE, NORMAL_TEXTSIZE, WHITE } from "./uiconstants";
-import {fade_service} from "./services"
+import {fade_service, scene_manage_service} from "./services"
+import { StorylistScene } from "./StorylistScene";
 
 // starttext entity
 let starttext_anim = 0//component
@@ -46,7 +47,7 @@ export class WelcomeScene extends View {
     mouse_pressed(e: object) {
         add_ripple(p.mouseX, p.mouseY)
         fade_service.start_out(()=>{
-            alert("Feed out done")
+            scene_manage_service.set_scene(new StorylistScene())
         })
         return false
     }
