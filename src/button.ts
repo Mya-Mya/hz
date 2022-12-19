@@ -19,6 +19,7 @@ export class Button extends View {
     private variant: ButtonVariant = ButtonVariant.Normal
     private hover: boolean = false
     private onclick_handler_s: (() => void)[] = []
+    private visible: boolean = true
     constructor(
         public x: number,
         public y: number,
@@ -47,23 +48,27 @@ export class Button extends View {
             p.abs(this.x - p.mouseX) * 2 < BUTTON_WIDTH &&
             p.abs(this.y - p.mouseY) * 2 < BUTTON_HEIGHT
         )
-
-        p.push()
-        p.rectMode(p.CENTER)
-        p.noStroke()
-        p.translate(this.x, this.y)
-        p.fill(this.get_color())
-        p.rect(0, 0, RECT_W, BUTTON_HEIGHT)
-        p.circle(L1, 0, BUTTON_HEIGHT)
-        p.circle(L2, 0, BUTTON_HEIGHT)
-        p.textAlign(p.CENTER, p.CENTER)
-        p.fill(WHITE())
-        p.textSize(NORMAL_TEXTSIZE)
-        p.text(this.text, 0, 0)
-        p.pop()
+        if (this.visible) {
+            p.push()
+            p.rectMode(p.CENTER)
+            p.noStroke()
+            p.translate(this.x, this.y)
+            p.fill(this.get_color())
+            p.rect(0, 0, RECT_W, BUTTON_HEIGHT)
+            p.circle(L1, 0, BUTTON_HEIGHT)
+            p.circle(L2, 0, BUTTON_HEIGHT)
+            p.textAlign(p.CENTER, p.CENTER)
+            p.fill(WHITE())
+            p.textSize(NORMAL_TEXTSIZE)
+            p.text(this.text, 0, 0)
+            p.pop()
+        }
     }
     set_variant(vatiant: ButtonVariant) {
         this.variant = vatiant
+    }
+    set_visible(b: boolean) {
+        this.visible = b
     }
     mouse_pressed(e: any): boolean {
         if (this.hover) this.onclick_handler_s.forEach(_ => _())
